@@ -13,13 +13,13 @@ public class User {
     @Column
     @NotNull
     @NotNull(message = "Please Enter A First Name")
-    @NotBlank
-    @NotEmpty
+    @NotBlank(message = "Please Enter A First Name")
+    @NotEmpty(message = "Please Enter A First Name")
     private String firstName;
     @Column
     @NotNull(message = "Please Enter A Last Name")
-    @NotEmpty
-    @NotBlank
+    @NotEmpty(message = "Please Enter A Last Name")
+    @NotBlank(message = "Please Enter A Last Name")
     private String lastName;
     @Column
     @NotNull(message = "Please Enter An Age")
