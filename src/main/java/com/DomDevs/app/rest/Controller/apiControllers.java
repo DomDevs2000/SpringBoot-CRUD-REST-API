@@ -1,11 +1,13 @@
 package com.DomDevs.app.rest.Controller;
 
+import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class apiControllers {
@@ -27,6 +29,7 @@ public class apiControllers {
         try {
             return userRepo.findAll();
         } catch (Exception e) {
+//            throw new UserNotFoundException();
             return null;
         }
 
@@ -42,9 +45,10 @@ public class apiControllers {
         }
 
     }
+
     @GetMapping(value = "/users/{id}")
-    public User getOneUser(@PathVariable long id){
-        return  userRepo.findById(id).get();
+    public User getOneUser(@PathVariable long id) {
+        return userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PutMapping(value = "users/update/{id}")
