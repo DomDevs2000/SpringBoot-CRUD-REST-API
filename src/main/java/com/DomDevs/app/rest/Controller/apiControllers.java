@@ -3,6 +3,7 @@ package com.DomDevs.app.rest.Controller;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +30,9 @@ public class apiControllers {
     }
 
     @PostMapping(value = "/users/create")
-    public String saveUser(@RequestBody User user) {
-        try {
-            userRepo.save(user);
-            return "User Created";
-        } catch (Exception e) {
-            return "Error Creating User...";
-        }
-
+    public String saveUser(@RequestBody @Valid User user) {
+        userRepo.save(user);
+        return "User Created";
     }
 
     @GetMapping(value = "/users/{id}")
@@ -45,7 +41,7 @@ public class apiControllers {
     }
 
     @PutMapping(value = "users/update/{id}")
-    public String updateUser(@PathVariable long id, @RequestBody User user) {
+    public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
@@ -55,7 +51,7 @@ public class apiControllers {
     }
 
     @DeleteMapping(value = "users/delete/{id}")
-    public String deleteUser(@PathVariable long id) {
+    public String deleteUser(@PathVariable @Valid long id) {
         User deletedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         userRepo.delete(deletedUser);
         return "Deleted User With The id: " + id;
