@@ -4,7 +4,9 @@ import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -29,14 +31,9 @@ public class apiControllers {
     }
 
     @PostMapping(value = "/users/create")
-    public String saveUser(@RequestBody User user) {
-        try {
-            userRepo.save(user);
-            return "User Created";
-        } catch (Exception e) {
-            return "Error Creating User...";
-        }
-
+    public String saveUser(@RequestBody @Validated User user) {
+        userRepo.save(user);
+        return "User Created";
     }
 
     @GetMapping(value = "/users/{id}")
@@ -45,7 +42,7 @@ public class apiControllers {
     }
 
     @PutMapping(value = "users/update/{id}")
-    public String updateUser(@PathVariable long id, @RequestBody User user) {
+    public String updateUser(@PathVariable long id, @RequestBody @Validated User user) {
         User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());

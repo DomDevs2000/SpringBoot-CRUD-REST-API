@@ -1,6 +1,9 @@
 package com.DomDevs.app.rest.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+
 
 @Entity
 public class User {
@@ -8,10 +11,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
+    @NotNull
+    @NotNull(message = "Please Enter A First Name")
+    @NotBlank
+    @NotEmpty
     private String firstName;
     @Column
+    @NotNull(message = "Please Enter A Last Name")
+    @NotEmpty
+    @NotBlank
     private String lastName;
     @Column
+    @NotNull(message = "Please Enter An Age")
+    @Min(value = 1, message = "Age should not be less than 1")
+    @Max(value = 150, message = "Age should not be greater than 150")
     private int age;
 
     public long getId() {
@@ -26,7 +39,7 @@ public class User {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(@Valid String firstName) {
         this.firstName = firstName;
     }
 
@@ -34,7 +47,7 @@ public class User {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(@Valid String lastName) {
         this.lastName = lastName;
     }
 
@@ -42,9 +55,7 @@ public class User {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(@Valid int age) {
         this.age = age;
     }
-
-
 }
