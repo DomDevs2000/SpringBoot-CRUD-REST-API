@@ -5,9 +5,7 @@ import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class apiControllers {
     }
 
     @PutMapping(value = "users/update/{id}")
-    public String updateUser(@PathVariable long id,@Valid @RequestBody  User user) {
+    public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
@@ -53,7 +51,7 @@ public class apiControllers {
     }
 
     @DeleteMapping(value = "users/delete/{id}")
-    public String deleteUser(@PathVariable long id) {
+    public String deleteUser(@PathVariable @Valid long id) {
         User deletedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         userRepo.delete(deletedUser);
         return "Deleted User With The id: " + id;
