@@ -27,7 +27,6 @@ public class apiControllers {
         try {
             return userRepo.findAll();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
 
@@ -42,6 +41,10 @@ public class apiControllers {
             return "Error Creating User...";
         }
 
+    }
+    @GetMapping(value = "/users/{id}")
+    public User getOneUser(@PathVariable long id){
+        return  userRepo.findById(id).get();
     }
 
     @PutMapping(value = "users/update/{id}")
