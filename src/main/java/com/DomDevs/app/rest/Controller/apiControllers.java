@@ -36,13 +36,13 @@ public class apiControllers {
         updatedUser.setLastName(user.getLastName());
         updatedUser.setAge(user.getAge());
         userRepo.save(updatedUser);
-        return "User updated...";
+        return "Updated user with the id: " + id;
     }
 
-    @DeleteMapping(value="users/delete/{id}")
-    public String deleteUser(@PathVariable long id){
+    @DeleteMapping(value = "users/delete/{id}")
+    public String deleteUser(@PathVariable long id) {
         User deletedUser = userRepo.findById(id).get();
         userRepo.delete(deletedUser);
-        return "User has been deleted";
+        return "Deleted user with the id: " + id;
     }
 }
