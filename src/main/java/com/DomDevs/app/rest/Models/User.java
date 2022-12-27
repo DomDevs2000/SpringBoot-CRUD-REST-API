@@ -1,9 +1,17 @@
 package com.DomDevs.app.rest.Models;
 
+import jakarta.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column
     private String firstName;
+    @Column
     private String lastName;
+    @Column
     private int age;
 
     public long getId() {
@@ -37,4 +45,10 @@ public class User {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
 }
