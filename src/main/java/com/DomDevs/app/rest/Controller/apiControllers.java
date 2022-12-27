@@ -3,6 +3,7 @@ package com.DomDevs.app.rest.Controller;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class apiControllers {
     }
 
     @PostMapping(value = "/users/create")
-    public String saveUser(@RequestBody @Validated User user) {
+    public String saveUser(@RequestBody @Valid User user) {
         userRepo.save(user);
         return "User Created";
     }
@@ -42,7 +43,7 @@ public class apiControllers {
     }
 
     @PutMapping(value = "users/update/{id}")
-    public String updateUser(@PathVariable long id, @RequestBody @Validated User user) {
+    public String updateUser(@PathVariable long id,@Valid @RequestBody  User user) {
         User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
