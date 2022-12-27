@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class apiControllers {
@@ -26,13 +25,7 @@ public class apiControllers {
 
     @GetMapping("/users")
     public List<User> getUsers() {
-        try {
-            return userRepo.findAll();
-        } catch (Exception e) {
-//            throw new UserNotFoundException();
-            return null;
-        }
-
+        return userRepo.findAll();
     }
 
     @PostMapping(value = "/users/create")
@@ -53,18 +46,18 @@ public class apiControllers {
 
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @RequestBody User user) {
-            User updatedUser = userRepo.findById(id).orElseThrow(()-> new UserNotFoundException(id));
-            updatedUser.setFirstName(user.getFirstName());
-            updatedUser.setLastName(user.getLastName());
-            updatedUser.setAge(user.getAge());
-            userRepo.save(updatedUser);
-            return "Updated User With The id: " + id;
+        User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        updatedUser.setAge(user.getAge());
+        userRepo.save(updatedUser);
+        return "Updated User With The id: " + id;
     }
 
     @DeleteMapping(value = "users/delete/{id}")
     public String deleteUser(@PathVariable long id) {
-            User deletedUser = userRepo.findById(id).orElseThrow(()-> new UserNotFoundException(id));
-            userRepo.delete(deletedUser);
-            return "Deleted User With The id: " + id;
+        User deletedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        userRepo.delete(deletedUser);
+        return "Deleted User With The id: " + id;
     }
 }
