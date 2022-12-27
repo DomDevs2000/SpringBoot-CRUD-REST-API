@@ -18,7 +18,7 @@ public class User {
         return id;
     }
 
-    public void setId() {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,9 +46,7 @@ public class User {
         this.age = age;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 
 
 }
