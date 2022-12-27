@@ -24,9 +24,9 @@ public class apiControllers {
 
     @GetMapping("/users")
     public List<User> getUsers() {
-        try{
+        try {
             return userRepo.findAll();
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -35,10 +35,10 @@ public class apiControllers {
 
     @PostMapping(value = "/users/create")
     public String saveUser(@RequestBody User user) {
-        try{
+        try {
             userRepo.save(user);
             return "User Created";
-        }catch(Exception e) {
+        } catch (Exception e) {
             return "Error Creating User...";
         }
 
@@ -46,13 +46,14 @@ public class apiControllers {
 
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @RequestBody User user) {
-        try{ User updatedUser = userRepo.findById(id).get();
+        try {
+            User updatedUser = userRepo.findById(id).get();
             updatedUser.setFirstName(user.getFirstName());
             updatedUser.setLastName(user.getLastName());
             updatedUser.setAge(user.getAge());
             userRepo.save(updatedUser);
             return "Updated User With The id: " + id;
-        }  catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error Updated User With The id: " + id;
         }
@@ -61,14 +62,14 @@ public class apiControllers {
 
     @DeleteMapping(value = "users/delete/{id}")
     public String deleteUser(@PathVariable long id) {
-        try{
+        try {
             User deletedUser = userRepo.findById(id).get();
             userRepo.delete(deletedUser);
             return "Deleted User With tThe id: " + id;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error");
-            return "Error Deleting User With id: " +id;
+            return "Error Deleting User With id: " + id;
         }
 
     }
