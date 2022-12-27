@@ -53,31 +53,18 @@ public class apiControllers {
 
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @RequestBody User user) {
-        try {
-            User updatedUser = userRepo.findById(id).get();
+            User updatedUser = userRepo.findById(id).orElseThrow(()-> new UserNotFoundException(id));
             updatedUser.setFirstName(user.getFirstName());
             updatedUser.setLastName(user.getLastName());
             updatedUser.setAge(user.getAge());
             userRepo.save(updatedUser);
             return "Updated User With The id: " + id;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error Updated User With The id: " + id;
-        }
-
     }
 
     @DeleteMapping(value = "users/delete/{id}")
     public String deleteUser(@PathVariable long id) {
-        try {
-            User deletedUser = userRepo.findById(id).get();
+            User deletedUser = userRepo.findById(id).orElseThrow(()-> new UserNotFoundException(id));
             userRepo.delete(deletedUser);
-            return "Deleted User With tThe id: " + id;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error");
-            return "Error Deleting User With id: " + id;
-        }
-
+            return "Deleted User With The id: " + id;
     }
 }
