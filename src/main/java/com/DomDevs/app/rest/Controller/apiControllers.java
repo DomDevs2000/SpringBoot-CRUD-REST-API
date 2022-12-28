@@ -6,15 +6,18 @@ import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
+import com.DomDevs.app.rest.UserService.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 public class apiControllers {
+    @Autowired
+    private IUserService userService;
     @Autowired
     private UserRepo userRepo;
 
@@ -24,9 +27,13 @@ public class apiControllers {
     }
 
     @GetMapping("/users")
-    public Page<User> getUsers() {
-        Pageable wholePage = Pageable.unpaged();
-        return userRepo.findAll(wholePage);
+    public List<User> getUsers() {
+        return userRepo.findAll();
+    }
+
+    @GetMapping(value = "/users?page={pageNo}&size={pageSize}")
+    public List<User> getPaginatedUsers(@PathVariable int pageNo, @PathVariable int pageSize) {
+        return userService.findAllPaginated(pageNo, pageSize);
     }
 
     @PostMapping(value = "/users/create")
@@ -35,7 +42,7 @@ public class apiControllers {
         return "User Created";
     }
 
-    @GetMapping(value = "/users/{id}")
+    @GetMapping(value = "/users/id/{id}")
     public User getOneUser(@PathVariable long id) {
         try {
             return userRepo.findById(id).get();
@@ -45,9 +52,9 @@ public class apiControllers {
     }
 
     @GetMapping("/users/age/{age}")
-    public Page<User> findAllByAge(@Valid @PathVariable int age) {
+    public List<User> getAllByAge(@Valid @PathVariable int age) {
         try {
-            return userRepo.findAllByAge(age, Pageable.unpaged());
+            return userService.findAllByAge(age);
         } catch (RuntimeException exception) {
             throw new AgeNotFoundException(age);
         }
@@ -55,9 +62,9 @@ public class apiControllers {
 
 
     @GetMapping("/users/firstname/{firstName}")
-    public Page<User> findAllByFirstName(@PathVariable String firstName) {
+    public List<User> getAllByFirstName(@PathVariable String firstName) {
         try {
-            return userRepo.findAllByFirstName(firstName, Pageable.unpaged());
+            return userService.findAllByFirstName(firstName);
         } catch (RuntimeException exception) {
             exception.getStackTrace();
             throw new FirstNameNotFoundException(firstName);
@@ -65,9 +72,9 @@ public class apiControllers {
     }
 
     @GetMapping("/users/lastname/{lastName}")
-    public Page<User> findAllByLastname(@PathVariable String lastName) {
+    public List<User> getAllByLastname(@PathVariable String lastName) {
         try {
-            return userRepo.findAllByLastName(lastName, Pageable.unpaged());
+            return userService.findAllByLastName(lastName);
         } catch (RuntimeException exception) {
             exception.getStackTrace();
             throw new LastNameNotFoundException(lastName);

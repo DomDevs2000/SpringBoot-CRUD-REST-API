@@ -1,15 +1,18 @@
-package com.DomDevs.app.rest.Repo;
+package com.DomDevs.app.rest.UserService;
+
 
 import com.DomDevs.app.rest.Models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+public interface IUserService {
+    List<User> findAllPaginated(int pageNo, int pageSize);
 
-public interface UserRepo extends JpaRepository<User, Long> {
-    List<User> findAllByFirstName(String firstName);
-    List<User> findAllByLastName(String lastName);
     List<User> findAllByAge(int age);
+
+    List<User> findAllByFirstName(String firstName);
+
+    List<User> findAllByLastName(String lastName);
 }
