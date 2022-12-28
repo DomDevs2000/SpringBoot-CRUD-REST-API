@@ -32,7 +32,7 @@ public class apiControllers {
     }
 
     @GetMapping(value = "/users?page={pageNo}&size={pageSize}")
-    public List<User> getPaginatedUser(@PathVariable int pageNo, @PathVariable int pageSize) {
+    public List<User> getPaginatedUsers(@PathVariable int pageNo, @PathVariable int pageSize) {
         return userService.findAllPaginated(pageNo, pageSize);
     }
 
@@ -52,7 +52,7 @@ public class apiControllers {
     }
 
     @GetMapping("/users/age/{age}")
-    public List<User> findAllByAge(@Valid @PathVariable int age) {
+    public List<User> getAllByAge(@Valid @PathVariable int age) {
         try {
             return userService.findAllByAge(age);
         } catch (RuntimeException exception) {
@@ -62,7 +62,7 @@ public class apiControllers {
 
 
     @GetMapping("/users/firstname/{firstName}")
-    public List<User> findAllByFirstName(@PathVariable String firstName) {
+    public List<User> getAllByFirstName(@PathVariable String firstName) {
         try {
             return userService.findAllByFirstName(firstName);
         } catch (RuntimeException exception) {
@@ -72,7 +72,7 @@ public class apiControllers {
     }
 
     @GetMapping("/users/lastname/{lastName}")
-    public List<User> findAllByLastname(@PathVariable String lastName) {
+    public List<User> getAllByLastname(@PathVariable String lastName) {
         try {
             return userService.findAllByLastName(lastName);
         } catch (RuntimeException exception) {
