@@ -51,14 +51,14 @@ public class apiControllers {
     public Page<User> findAllByAge(@Valid @PathVariable int age) {
         return userRepo.findAllByAge(age, Pageable.unpaged());
     }
-    //    @GetMapping("/users/firstname/{firstName}")
-//    public List<User> findAllByFirstName(@PathVariable String firstName) {
-//        return userRepo.findAllByAge(firstName);
-//    }
-//    @GetMapping("/users/lastname/{lastName}")
-//    public List<User> findAllByAge(@PathVariable String lastName) {
-//        return userRepo.findAllByAge(lastName);
-//    }
+        @GetMapping("/users/firstname/{firstName}")
+    public List<User> findAllByFirstName(@PathVariable String firstName) {
+        return userRepo.findAllByFirstName(firstName);
+    }
+    @GetMapping("/users/lastname/{lastName}")
+    public List<User> findAllByLastname(@PathVariable String lastName) {
+        return userRepo.findAllByLastName(lastName);
+    }
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         try {
