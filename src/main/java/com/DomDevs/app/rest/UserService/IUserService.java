@@ -2,8 +2,6 @@ package com.DomDevs.app.rest.UserService;
 
 
 import com.DomDevs.app.rest.Models.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
