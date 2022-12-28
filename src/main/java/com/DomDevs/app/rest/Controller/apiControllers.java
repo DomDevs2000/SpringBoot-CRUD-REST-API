@@ -1,5 +1,6 @@
 package com.DomDevs.app.rest.Controller;
 
+import com.DomDevs.app.rest.Exceptions.AgeNotFoundException;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
@@ -8,10 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,19 +43,24 @@ public class apiControllers {
             throw new UserNotFoundException(id);
         }
     }
-
     @GetMapping("/users/age/{age}")
     public Page<User> findAllByAge(@Valid @PathVariable int age) {
-        return userRepo.findAllByAge(age, Pageable.unpaged());
+        try {
+            return userRepo.findAllByAge(age, Pageable.unpaged());
+        } catch (RuntimeException exception) {
+            exception.getStackTrace();
+            throw new AgeNotFoundException(age);
+        }
     }
-        @GetMapping("/users/firstname/{firstName}")
-    public List<User> findAllByFirstName(@PathVariable String firstName) {
-        return userRepo.findAllByFirstName(firstName);
+    @GetMapping("/users/firstname/{firstName}")
+    public Page<User> findAllByFirstName(@PathVariable String firstName) {
+        return userRepo.findAllByFirstName(firstName, Pageable.unpaged());
     }
     @GetMapping("/users/lastname/{lastName}")
-    public List<User> findAllByLastname(@PathVariable String lastName) {
-        return userRepo.findAllByLastName(lastName);
+    public Page<User> findAllByLastname(@PathVariable String lastName) {
+        return userRepo.findAllByLastName(lastName, Pageable.unpaged());
     }
+
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         try {
@@ -69,6 +71,7 @@ public class apiControllers {
             userRepo.save(updatedUser);
             return "Updated User With The id: " + id;
         } catch (RuntimeException exception) {
+            exception.getStackTrace();
             throw new UserNotFoundException(id);
         }
     }
@@ -80,6 +83,7 @@ public class apiControllers {
             userRepo.delete(deletedUser);
             return "Deleted User With The id: " + id;
         } catch (RuntimeException exception) {
+            exception.getStackTrace();
             throw new UserNotFoundException(id);
         }
     }
