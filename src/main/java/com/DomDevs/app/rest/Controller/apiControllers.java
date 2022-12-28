@@ -31,7 +31,7 @@ public class apiControllers {
         return userRepo.findAll();
     }
 
-    @GetMapping(value = "/users?page={pageNo}&size={pageSize}")
+    @GetMapping(value = "/users/{pageNo}/{pageSize}")
     public List<User> getPaginatedUsers(@PathVariable int pageNo, @PathVariable int pageSize) {
         return userService.findAllPaginated(pageNo, pageSize);
     }
