@@ -9,8 +9,6 @@ import com.DomDevs.app.rest.Repo.UserRepo;
 import com.DomDevs.app.rest.UserService.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,17 +51,20 @@ public class apiControllers {
         }
     }
 
-//    @GetMapping("/users/age/{age}")
-//    public Page<User> getByAge( @PathVariable int age){
-////        return userService.findByAgePaginated(pageNo,pageSize, age);
-//        return userService.findAllByAge(age);
-//    }
+    @GetMapping("/users/age/{age}")
+    public List<User> findAllByAge(@Valid @PathVariable int age) {
+        try {
+            return userService.findAllByAge(age);
+        } catch (RuntimeException exception) {
+            throw new AgeNotFoundException(age);
+        }
+    }
 
 
     @GetMapping("/users/firstname/{firstName}")
     public List<User> findAllByFirstName(@PathVariable String firstName) {
         try {
-            return userRepo.findAllByFirstName(firstName);
+            return userService.findAllByFirstName(firstName);
         } catch (RuntimeException exception) {
             exception.getStackTrace();
             throw new FirstNameNotFoundException(firstName);
@@ -73,7 +74,7 @@ public class apiControllers {
     @GetMapping("/users/lastname/{lastName}")
     public List<User> findAllByLastname(@PathVariable String lastName) {
         try {
-            return userRepo.findAllByLastName(lastName);
+            return userService.findAllByLastName(lastName);
         } catch (RuntimeException exception) {
             exception.getStackTrace();
             throw new LastNameNotFoundException(lastName);

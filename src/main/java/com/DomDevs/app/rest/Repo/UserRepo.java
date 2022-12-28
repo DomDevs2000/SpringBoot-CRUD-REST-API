@@ -11,4 +11,5 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<User, Long> {
     List<User> findAllByFirstName(String firstName);
     List<User> findAllByLastName(String lastName);
+    List<User> findAllByAge(int age);
 }

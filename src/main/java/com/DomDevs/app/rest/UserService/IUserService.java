@@ -10,11 +10,9 @@ import java.util.List;
 public interface IUserService {
     List<User> findAllPaginated(int pageNo, int pageSize);
 
-//    List<User> findByAgePaginated(int pageNo, int pageSize, int age);
-//    Page<User> findAllByAge(int age);
+    List<User> findAllByAge(int age);
 
-//    Page<User> findAllByFirstName(String firstName);
-//
-//    Page<User> findAllByLastName(String lastName);
+    List<User> findAllByFirstName(String firstName);
 
+    List<User> findAllByLastName(String lastName);
 }
