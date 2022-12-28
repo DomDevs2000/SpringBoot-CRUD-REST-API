@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class FirstNameNotFoundAdvice {
     @ResponseBody
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(FirstNameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String FirstNameNotFoundHandler(FirstNameNotFoundException ex) {
         return ex.getMessage();
