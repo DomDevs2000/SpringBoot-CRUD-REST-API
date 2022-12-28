@@ -6,15 +6,20 @@ import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
+import com.DomDevs.app.rest.UserService.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class apiControllers {
+    @Autowired
+    private IUserService userService;
     @Autowired
     private UserRepo userRepo;
 
@@ -35,7 +40,7 @@ public class apiControllers {
         return "User Created";
     }
 
-    @GetMapping(value = "/users/{id}")
+    @GetMapping(value = "/users/id/{id}")
     public User getOneUser(@PathVariable long id) {
         try {
             return userRepo.findById(id).get();
@@ -44,14 +49,14 @@ public class apiControllers {
         }
     }
 
-    @GetMapping("/users/age/{age}")
-    public Page<User> findAllByAge(@Valid @PathVariable int age) {
-        try {
-            return userRepo.findAllByAge(age, Pageable.unpaged());
-        } catch (RuntimeException exception) {
-            throw new AgeNotFoundException(age);
-        }
-    }
+//    @GetMapping("/users/age/{age}")
+//    public Page<User> findAllByAge(@Valid @PathVariable int age) {
+//        try {
+//            return userRepo.findAllByAge(Pageable.unpaged());
+//        } catch (RuntimeException exception) {
+//            throw new AgeNotFoundException(age);
+//        }
+//    }
 
 
     @GetMapping("/users/firstname/{firstName}")
@@ -74,6 +79,10 @@ public class apiControllers {
         }
     }
 
+    @GetMapping(value="/users/{pageNo}/{pageSize}")
+    public List<User> getPaginatedUser(@PathVariable int pageNo, @PathVariable int pageSize){
+        return userService.findAllPaginated(pageNo,pageSize);
+    }
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         try {
