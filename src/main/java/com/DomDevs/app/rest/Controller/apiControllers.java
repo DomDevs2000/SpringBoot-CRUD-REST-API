@@ -47,7 +47,18 @@ public class apiControllers {
         }
     }
 
-
+    @GetMapping("/users/age/{age}")
+    public Page<User> findAllByAge(@Valid @PathVariable int age) {
+        return userRepo.findAllByAge(age, Pageable.unpaged());
+    }
+    //    @GetMapping("/users/firstname/{firstName}")
+//    public List<User> findAllByFirstName(@PathVariable String firstName) {
+//        return userRepo.findAllByAge(firstName);
+//    }
+//    @GetMapping("/users/lastname/{lastName}")
+//    public List<User> findAllByAge(@PathVariable String lastName) {
+//        return userRepo.findAllByAge(lastName);
+//    }
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         try {
