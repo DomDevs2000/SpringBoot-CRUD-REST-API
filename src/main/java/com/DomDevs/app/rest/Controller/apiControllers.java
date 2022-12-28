@@ -53,6 +53,7 @@ public class apiControllers {
         }
     }
 
+
     @GetMapping("/users/firstname/{firstName}")
     public Page<User> findAllByFirstName(@PathVariable String firstName) {
         try {
@@ -61,7 +62,6 @@ public class apiControllers {
             exception.getStackTrace();
             throw new FirstNameNotFoundException(firstName);
         }
-
     }
 
     @GetMapping("/users/lastname/{lastName}")
