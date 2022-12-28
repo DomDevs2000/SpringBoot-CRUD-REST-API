@@ -16,12 +16,7 @@ public class apiControllers {
 
     @GetMapping("/")
     public String getPage() {
-        return "Welcome to my CRUD REST API project using Spring Boot, JPA, Maven and MYSQL. " +
-                "Please use Postman/Insomnia to create POST/PUT/DELETE requests. " +
-                "To get all users, please submit a GET request to '/users' " +
-                "To create a new user, please submit a POST request to '/users/create' and fill in the JSON body with firstName, lastName and age. " +
-                "To update a user, please submit a PUT request to '/users/update/{id}' and fill in the JSON body with the content you wish to update " +
-                "To delete a user, please submit a DELETE request to 'users/delete/{id}' ";
+        return "Welcome to my CRUD REST API project using Spring Boot, JPA, Maven and MYSQL. " + "Please use Postman/Insomnia to create POST/PUT/DELETE requests. " + "To get all users, please submit a GET request to '/users' " + "To create a new user, please submit a POST request to '/users/create' and fill in the JSON body with firstName, lastName and age. " + "To update a user, please submit a PUT request to '/users/update/{id}' and fill in the JSON body with the content you wish to update " + "To delete a user, please submit a DELETE request to 'users/delete/{id}' ";
     }
 
     @GetMapping("/users")
@@ -42,7 +37,6 @@ public class apiControllers {
         } catch (RuntimeException exception) {
             throw new UserNotFoundException(id);
         }
-//        return userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PutMapping(value = "users/update/{id}")
@@ -57,25 +51,16 @@ public class apiControllers {
         } catch (RuntimeException exception) {
             throw new UserNotFoundException(id);
         }
-//        User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-//        updatedUser.setFirstName(user.getFirstName());
-//        updatedUser.setLastName(user.getLastName());
-//        updatedUser.setAge(user.getAge());
-//        userRepo.save(updatedUser);
-//        return "Updated User With The id: " + id;
     }
 
     @DeleteMapping(value = "users/delete/{id}")
     public String deleteUser(@PathVariable @Valid long id) {
-        try{
+        try {
             User deletedUser = userRepo.findById(id).get();
             userRepo.delete(deletedUser);
             return "Deleted User With The id: " + id;
-        }catch (RuntimeException exception){
+        } catch (RuntimeException exception) {
             throw new UserNotFoundException(id);
         }
-//        User deletedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-//        userRepo.delete(deletedUser);
-//        return "Deleted User With The id: " + id;
     }
 }
