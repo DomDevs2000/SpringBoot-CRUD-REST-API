@@ -19,4 +19,24 @@ public class UserService implements IUserService {
         Page<User> pagedResult = userRepo.findAll(page);
         return pagedResult.toList();
     }
+    //    public List<User> findByAgePaginated(int pageNo, int pageSize, int age) {
+//        Pageable page = PageRequest.of(pageNo,pageSize);
+//        Page<User> pagedResult = userRepo.findAll(page);
+//        return pagedResult.toList();
+//    }
+
+//    @Override
+//    public Page<User> findAllByAge(int age) {
+//        return null;
+//    }
+
+//    @Override
+//    public Page<User> findAllByFirstName(String firstName) {
+//        return null;
+//    }
+//
+//    @Override
+//    public Page<User> findAllByLastName(String lastName) {
+//        return null;
+//    }
 }

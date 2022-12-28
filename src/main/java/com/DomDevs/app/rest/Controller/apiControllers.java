@@ -29,9 +29,13 @@ public class apiControllers {
     }
 
     @GetMapping("/users")
-    public Page<User> getUsers() {
-        Pageable wholePage = Pageable.unpaged();
-        return userRepo.findAll(wholePage);
+    public List<User> getUsers() {
+        return userRepo.findAll();
+    }
+
+    @GetMapping(value = "/users?page={pageNo}&size={pageSize}")
+    public List<User> getPaginatedUser(@PathVariable int pageNo, @PathVariable int pageSize) {
+        return userService.findAllPaginated(pageNo, pageSize);
     }
 
     @PostMapping(value = "/users/create")
@@ -50,19 +54,16 @@ public class apiControllers {
     }
 
 //    @GetMapping("/users/age/{age}")
-//    public Page<User> findAllByAge(@Valid @PathVariable int age) {
-//        try {
-//            return userRepo.findAllByAge(Pageable.unpaged());
-//        } catch (RuntimeException exception) {
-//            throw new AgeNotFoundException(age);
-//        }
+//    public Page<User> getByAge( @PathVariable int age){
+////        return userService.findByAgePaginated(pageNo,pageSize, age);
+//        return userService.findAllByAge(age);
 //    }
 
 
     @GetMapping("/users/firstname/{firstName}")
-    public Page<User> findAllByFirstName(@PathVariable String firstName) {
+    public List<User> findAllByFirstName(@PathVariable String firstName) {
         try {
-            return userRepo.findAllByFirstName(firstName, Pageable.unpaged());
+            return userRepo.findAllByFirstName(firstName);
         } catch (RuntimeException exception) {
             exception.getStackTrace();
             throw new FirstNameNotFoundException(firstName);
@@ -70,19 +71,15 @@ public class apiControllers {
     }
 
     @GetMapping("/users/lastname/{lastName}")
-    public Page<User> findAllByLastname(@PathVariable String lastName) {
+    public List<User> findAllByLastname(@PathVariable String lastName) {
         try {
-            return userRepo.findAllByLastName(lastName, Pageable.unpaged());
+            return userRepo.findAllByLastName(lastName);
         } catch (RuntimeException exception) {
             exception.getStackTrace();
             throw new LastNameNotFoundException(lastName);
         }
     }
 
-    @GetMapping(value="/users/{pageNo}/{pageSize}")
-    public List<User> getPaginatedUser(@PathVariable int pageNo, @PathVariable int pageSize){
-        return userService.findAllPaginated(pageNo,pageSize);
-    }
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
         try {
