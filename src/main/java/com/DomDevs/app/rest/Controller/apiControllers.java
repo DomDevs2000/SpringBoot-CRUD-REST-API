@@ -1,17 +1,17 @@
 package com.DomDevs.app.rest.Controller;
 
 import com.DomDevs.app.rest.Exceptions.AgeNotFoundException;
+import com.DomDevs.app.rest.Exceptions.FirstNameNotFoundException;
+import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 public class apiControllers {
@@ -43,22 +43,35 @@ public class apiControllers {
             throw new UserNotFoundException(id);
         }
     }
+
     @GetMapping("/users/age/{age}")
     public Page<User> findAllByAge(@Valid @PathVariable int age) {
         try {
             return userRepo.findAllByAge(age, Pageable.unpaged());
         } catch (RuntimeException exception) {
-            exception.getStackTrace();
             throw new AgeNotFoundException(age);
         }
     }
+
     @GetMapping("/users/firstname/{firstName}")
     public Page<User> findAllByFirstName(@PathVariable String firstName) {
-        return userRepo.findAllByFirstName(firstName, Pageable.unpaged());
+        try {
+            return userRepo.findAllByFirstName(firstName, Pageable.unpaged());
+        } catch (RuntimeException exception) {
+            exception.getStackTrace();
+            throw new FirstNameNotFoundException(firstName);
+        }
+
     }
+
     @GetMapping("/users/lastname/{lastName}")
     public Page<User> findAllByLastname(@PathVariable String lastName) {
-        return userRepo.findAllByLastName(lastName, Pageable.unpaged());
+        try {
+            return userRepo.findAllByLastName(lastName, Pageable.unpaged());
+        } catch (RuntimeException exception) {
+            exception.getStackTrace();
+            throw new LastNameNotFoundException(lastName);
+        }
     }
 
     @PutMapping(value = "users/update/{id}")
