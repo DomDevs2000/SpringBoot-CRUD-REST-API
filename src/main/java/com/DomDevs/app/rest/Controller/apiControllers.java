@@ -37,23 +37,45 @@ public class apiControllers {
 
     @GetMapping(value = "/users/{id}")
     public User getOneUser(@PathVariable long id) {
-        return userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        try {
+            return userRepo.findById(id).get();
+        } catch (RuntimeException exception) {
+            throw new UserNotFoundException(id);
+        }
+//        return userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PutMapping(value = "users/update/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
-        User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setAge(user.getAge());
-        userRepo.save(updatedUser);
-        return "Updated User With The id: " + id;
+        try {
+            User updatedUser = userRepo.findById(id).get();
+            updatedUser.setFirstName(user.getFirstName());
+            updatedUser.setLastName(user.getLastName());
+            updatedUser.setAge(user.getAge());
+            userRepo.save(updatedUser);
+            return "Updated User With The id: " + id;
+        } catch (RuntimeException exception) {
+            throw new UserNotFoundException(id);
+        }
+//        User updatedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+//        updatedUser.setFirstName(user.getFirstName());
+//        updatedUser.setLastName(user.getLastName());
+//        updatedUser.setAge(user.getAge());
+//        userRepo.save(updatedUser);
+//        return "Updated User With The id: " + id;
     }
 
     @DeleteMapping(value = "users/delete/{id}")
     public String deleteUser(@PathVariable @Valid long id) {
-        User deletedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        userRepo.delete(deletedUser);
-        return "Deleted User With The id: " + id;
+        try{
+            User deletedUser = userRepo.findById(id).get();
+            userRepo.delete(deletedUser);
+            return "Deleted User With The id: " + id;
+        }catch (RuntimeException exception){
+            throw new UserNotFoundException(id);
+        }
+//        User deletedUser = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+//        userRepo.delete(deletedUser);
+//        return "Deleted User With The id: " + id;
     }
 }
