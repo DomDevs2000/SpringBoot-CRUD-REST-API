@@ -1,9 +1,6 @@
 package com.DomDevs.app.rest.Controller;
 
-import com.DomDevs.app.rest.Exceptions.FirstNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
-import com.DomDevs.app.rest.Exceptions.ValidationException;
+import com.DomDevs.app.rest.Exceptions.*;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import com.DomDevs.app.rest.UserService.IUserService;
@@ -13,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -57,11 +55,12 @@ public class apiControllers {
     }
 
     @GetMapping("/users/age/{age}")
-    public List<User> getAllUsersByAge(@Valid @PathVariable int age) {
+    public List<User> getAllUsersByAge(@Valid @PathVariable @RequestBody int age) {
         try {
-            return userService.findAllByAge(age);
+                return userService.findAllByAge(age);
         } catch (RuntimeException e) {
-            throw new UserNotFoundException((long) age);
+            System.err.println(e.getStackTrace());
+            throw new AgeNotFoundException(age);
         }
     }
 
