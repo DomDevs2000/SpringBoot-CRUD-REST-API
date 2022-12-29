@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-public class apiControllers {
+public class ApiController {
     @Autowired
     private IUserService userService;
     @Autowired
