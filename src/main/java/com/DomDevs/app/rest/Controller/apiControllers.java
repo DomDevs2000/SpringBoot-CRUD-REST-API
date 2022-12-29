@@ -30,9 +30,9 @@ public class apiControllers {
         return userRepo.findAll();
     }
 
-    @GetMapping(value = "/users/{pageNo}/{pageSize}")
-    public List<User> getPaginatedUsers(@PathVariable int pageNo, @PathVariable int pageSize) {
-        return userService.findAllPaginated(pageNo, pageSize);
+    @GetMapping(value = "/users/{page}/{pageSize}")
+    public List<User> getPaginatedUsers(@PathVariable int page, @PathVariable int pageSize) {
+        return userService.findAllPaginated(page, pageSize);
     }
 
     @PostMapping(value = "/users/create")

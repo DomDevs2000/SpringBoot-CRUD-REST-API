@@ -16,9 +16,9 @@ public class UserService implements IUserService {
     private UserRepo userRepo;
 
     @Override
-    public List<User> findAllPaginated(int pageNo, int pageSize) {
-        Pageable page = PageRequest.of(pageNo, pageSize);
-        Page<User> pagedResult = userRepo.findAll(page);
+    public List<User> findAllPaginated(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<User> pagedResult = userRepo.findAll(pageable);
         return pagedResult.toList();
     }
 
