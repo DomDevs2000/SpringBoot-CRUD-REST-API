@@ -37,7 +37,7 @@ public class apiControllers {
     }
 
     @PostMapping(value = "/users/create")
-    public String saveUser(@RequestBody @Valid User user) {
+    public String createNewUser(@RequestBody @Valid User user) {
         userRepo.save(user);
         return "User Created";
     }
@@ -52,7 +52,7 @@ public class apiControllers {
     }
 
     @GetMapping("/users/age/{age}")
-    public List<User> getAllByAge(@Valid @PathVariable int age) {
+    public List<User> getAllUsersByAge(@Valid @PathVariable int age) {
         try {
             return userService.findAllByAge(age);
         } catch (RuntimeException exception) {
