@@ -1,9 +1,6 @@
 package com.DomDevs.app.rest;
 
 import com.DomDevs.app.rest.Controller.ApiController;
-import com.DomDevs.app.rest.Exceptions.AgeNotFoundException;
-import com.DomDevs.app.rest.Exceptions.FirstNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
 import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
@@ -20,12 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -173,34 +169,6 @@ public class ControllerTests {
                 .perform(get("/users/id/1")).andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Could Not Find User 1"));
-    }
-
-    @Test
-    public void shouldReturn404WhenUserIsNotFoundByFirstName() throws Exception {
-        when(userService.findAllByFirstName("John"))
-                .thenThrow(new FirstNameNotFoundException("John"));
-        mockMvc
-                .perform(get("/users/firstname/John")).andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Could Not Find User with first name: John"));
-    }
-    @Test
-    public void shouldReturn404WhenUserIsNotFoundByLastName() throws Exception {
-        when(userService.findAllByFirstName("doe"))
-                .thenThrow(new LastNameNotFoundException("doe"));
-        mockMvc
-                .perform(get("/users/firstname/doe")).andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Could Not Find User with first name: doe"));
-    }
-    @Test
-    public void shouldReturn404WhenUserIsNotFoundByAge() throws Exception {
-        when(userService.findAllByAge(10))
-                .thenThrow(new AgeNotFoundException(10));
-        mockMvc
-                .perform(get("/users/age/10"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
     }
 
 }
