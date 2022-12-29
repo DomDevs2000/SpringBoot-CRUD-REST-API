@@ -102,20 +102,6 @@ public class apiControllers {
                 throw new UserNotFoundException(id);
             }
         }
-//        try {
-//            User updatedUser = userRepo.findById(id).get();
-//            updatedUser.setFirstName(user.getFirstName());
-//            updatedUser.setLastName(user.getLastName());
-//            updatedUser.setAge(user.getAge());
-//            userRepo.save(updatedUser);
-//            return "Updated User With The id: " + id;
-//        } catch (ValidationException exception) {
-//            if (errors.hasErrors()) {
-//                exception.getStackTrace();
-//                throw new ValidationException(errors);
-//            }
-//            return "Error:";
-//        }
     }
 
     @DeleteMapping(value = "users/delete/{id}")

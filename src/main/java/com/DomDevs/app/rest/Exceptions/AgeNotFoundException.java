@@ -1,7 +1,6 @@
 package com.DomDevs.app.rest.Exceptions;
 
 
-
 public class AgeNotFoundException extends RuntimeException {
 
     public AgeNotFoundException(int age) {
