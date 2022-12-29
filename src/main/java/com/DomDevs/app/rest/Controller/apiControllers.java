@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @RestController
@@ -30,9 +29,9 @@ public class apiControllers {
         return userRepo.findAll();
     }
 
-    @GetMapping(value = "/users/{pageNo}/{pageSize}")
-    public List<User> getPaginatedUsers(@PathVariable int pageNo, @PathVariable int pageSize) {
-        return userService.findAllPaginated(pageNo, pageSize);
+    @GetMapping(value = "/users/page={page}/size={pageSize}")
+    public List<User> getPaginatedUsers(@PathVariable int page, @PathVariable int pageSize) {
+        return userService.findAllPaginated(page, pageSize);
     }
 
     @PostMapping(value = "/users/create")
@@ -57,7 +56,7 @@ public class apiControllers {
     @GetMapping("/users/age/{age}")
     public List<User> getAllUsersByAge(@Valid @PathVariable @RequestBody int age) {
         try {
-                return userService.findAllByAge(age);
+            return userService.findAllByAge(age);
         } catch (RuntimeException e) {
             System.err.println(e.getStackTrace());
             throw new AgeNotFoundException(age);
