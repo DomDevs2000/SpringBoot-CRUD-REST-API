@@ -31,21 +31,21 @@ class ValidationTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-//    @Test
-//    void shouldThrowValidationErrorWhenSettersAreEmpty() throws Exception {
-//        User user = new User();
-//        user.setId(5L);
-//        user.setFirstName("");
-//        user.setLastName("");
-//        user.setAge(0);
-//        when(userService.findAllByAge(0)).thenThrow(new ValidationException(null));
-//        mockMvc.perform(post("/users/create")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(toJson(user)))
-//                .andExpect(status().isBadRequest());
-//    }
-//
-//    private String toJson(User obj) throws JsonProcessingException {
-//        return objectMapper.writeValueAsString(obj);
-//}
+    @Test
+    void shouldThrowValidationErrorWhenSettersAreEmpty() throws Exception {
+        User user = new User();
+        user.setId(5L);
+        user.setFirstName("");
+        user.setLastName("");
+        user.setAge(1);
+        when(userRepo.save(user)).thenThrow(new ValidationException(null));
+        mockMvc.perform(post("/users/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(user)))
+                .andExpect(status().isBadRequest());
+    }
+
+    private String toJson(User obj) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(obj);
+    }
 }
