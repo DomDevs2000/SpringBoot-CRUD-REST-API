@@ -1,6 +1,8 @@
 package com.DomDevs.app.rest.Exceptions;
 
-public class UserNotFoundException extends RuntimeException {
+import java.util.NoSuchElementException;
+
+public class UserNotFoundException extends NoSuchElementException {
 
     public UserNotFoundException(Long id) {
         super("Could Not Find User " + id);

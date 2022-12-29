@@ -1,6 +1,9 @@
 package com.DomDevs.app.rest.Controller;
 
-import com.DomDevs.app.rest.Exceptions.*;
+import com.DomDevs.app.rest.Exceptions.FirstNameNotFoundException;
+import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
+import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
+import com.DomDevs.app.rest.Exceptions.ValidationException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import com.DomDevs.app.rest.UserService.IUserService;
@@ -42,7 +45,6 @@ public class apiControllers {
             userRepo.save(user);
             return "User Created";
         }
-
     }
 
     @GetMapping(value = "/users/id/{id}")
@@ -58,8 +60,8 @@ public class apiControllers {
     public List<User> getAllUsersByAge(@Valid @PathVariable int age) {
         try {
             return userService.findAllByAge(age);
-        } catch (RuntimeException exception) {
-            throw new AgeNotFoundException(age);
+        } catch (RuntimeException e) {
+            throw new UserNotFoundException((long) age);
         }
     }
 
@@ -89,12 +91,16 @@ public class apiControllers {
         if (errors.hasErrors()) {
             throw new ValidationException(errors);
         } else {
-            User updatedUser = userRepo.findById(id).get();
-            updatedUser.setFirstName(user.getFirstName());
-            updatedUser.setLastName(user.getLastName());
-            updatedUser.setAge(user.getAge());
-            userRepo.save(updatedUser);
-            return "Updated User With The id: " + id;
+            try {
+                User updatedUser = userRepo.findById(id).get();
+                updatedUser.setFirstName(user.getFirstName());
+                updatedUser.setLastName(user.getLastName());
+                updatedUser.setAge(user.getAge());
+                userRepo.save(updatedUser);
+                return "Updated User With The id: " + id;
+            } catch (Exception e) {
+                throw new UserNotFoundException(id);
+            }
         }
 //        try {
 //            User updatedUser = userRepo.findById(id).get();
