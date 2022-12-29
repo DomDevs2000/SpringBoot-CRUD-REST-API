@@ -1,13 +1,10 @@
-package com.DomDevs.app.rest;
+package com.DomDevs.app.rest.ControllerTests;
 
 import com.DomDevs.app.rest.Controller.ApiController;
-import com.DomDevs.app.rest.Exceptions.AgeNotFoundException;
-import com.DomDevs.app.rest.Exceptions.FirstNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import com.DomDevs.app.rest.UserService.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -121,8 +117,8 @@ public class ControllerTests {
     @Test
     public void shouldCreateNewUser() throws Exception {
         mockMvc.perform(post("/users/create").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\": \"John\", \"lastName\":\"Doe\", \"age\":\"22\"}"))
-                .andDo(print()).
-                andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(content().string("User Created"));
     }
 
@@ -130,78 +126,38 @@ public class ControllerTests {
     public void shouldDeleteUser() throws Exception {
         User user = new User();
         user.setId(1L);
-//        when(userRepo.delete(user)).thenReturn(user);
-//        mockMvc.perform(
-//                delete("/api/tasks/42").with()
-//        );
-//                .andExpect(status().isOk());
-//        mockMvc.perform(delete("/users/delete/1")).
-//                andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("User Deleted With The Id:" + user.getId()));
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setAge(12);
 
-//
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/delete/1").param("id", "1")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Deleted User With The id: " + user.getId()));
+
     }
 
 
     @Test
     public void shouldUpdateUser() throws Exception {
         User user = new User();
-        user.setId(50L);
+        user.setId(10L);
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setAge(22);
 
-        when(userRepo.save(user))
-                .thenReturn((user));
+        when(userRepo.save(user)).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/update/50"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/update/").content(new ObjectMapper().writeValueAsString(user)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[].id()").value(50))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[].id()").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName").value("John"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].lastName").value("Doe"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value("22"));
 
     }
 
-    @Test
-    public void shouldReturn404WhenUserIsNotFound() throws Exception {
-        when(userRepo.findById(1L))
-                .thenThrow(new UserNotFoundException(1L));
-        mockMvc
-                .perform(get("/users/id/1")).andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Could Not Find User 1"));
-    }
-
-    @Test
-    public void shouldReturn404WhenUserIsNotFoundByFirstName() throws Exception {
-        when(userService.findAllByFirstName("John"))
-                .thenThrow(new FirstNameNotFoundException("John"));
-        mockMvc
-                .perform(get("/users/firstname/John")).andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Could Not Find User with first name: John"));
-    }
-    @Test
-    public void shouldReturn404WhenUserIsNotFoundByLastName() throws Exception {
-        when(userService.findAllByFirstName("doe"))
-                .thenThrow(new LastNameNotFoundException("doe"));
-        mockMvc
-                .perform(get("/users/firstname/doe")).andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Could Not Find User with first name: doe"));
-    }
-    @Test
-    public void shouldReturn404WhenUserIsNotFoundByAge() throws Exception {
-        when(userService.findAllByAge(10))
-                .thenThrow(new AgeNotFoundException(10));
-        mockMvc
-                .perform(get("/users/age/10"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
 
 }
 
