@@ -1,4 +1,4 @@
-package com.DomDevs.app.rest;
+package com.DomDevs.app.rest.ExceptionTests;
 
 import com.DomDevs.app.rest.Controller.ApiController;
 import com.DomDevs.app.rest.Exceptions.AgeNotFoundException;

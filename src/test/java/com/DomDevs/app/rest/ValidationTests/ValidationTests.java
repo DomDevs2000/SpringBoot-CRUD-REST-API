@@ -1,4 +1,4 @@
-package com.DomDevs.app.rest;
+package com.DomDevs.app.rest.ValidationTests;
 
 import com.DomDevs.app.rest.Exceptions.ValidationException;
 import com.DomDevs.app.rest.Models.User;
