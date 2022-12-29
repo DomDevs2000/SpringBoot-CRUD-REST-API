@@ -7,7 +7,7 @@ import org.springframework.validation.ObjectError;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public  class ValidationException extends RuntimeException {
+public class ValidationException extends RuntimeException {
 
     private final BindingResult errors;
 
@@ -39,7 +39,7 @@ public  class ValidationException extends RuntimeException {
             FieldError fieldError = (FieldError) error;
             String exceptionMessage = fieldError.getDefaultMessage();
             String[] messageParts = exceptionMessage.split(";");
-            String finalPart = messageParts[messageParts.length -1];
+            String finalPart = messageParts[messageParts.length - 1];
             return (finalPart.trim().replaceAll("default message \\[|]]", ""));
         }
         return String.format("%s: %s", error.getObjectName(), error.getDefaultMessage());
