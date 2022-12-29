@@ -54,7 +54,7 @@ public class apiControllers {
     }
 
     @GetMapping("/users/age/{age}")
-    public List<User> getAllUsersByAge(@Valid @PathVariable @RequestBody int age) {
+    public List<User> getAllUsersByAge(@Valid @PathVariable  int age) {
         try {
             return userService.findAllByAge(age);
         } catch (RuntimeException e) {
