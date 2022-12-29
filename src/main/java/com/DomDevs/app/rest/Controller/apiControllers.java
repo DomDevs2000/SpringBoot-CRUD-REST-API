@@ -1,14 +1,12 @@
 package com.DomDevs.app.rest.Controller;
 
-import com.DomDevs.app.rest.Exceptions.AgeNotFoundException;
-import com.DomDevs.app.rest.Exceptions.FirstNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.LastNameNotFoundException;
-import com.DomDevs.app.rest.Exceptions.UserNotFoundException;
+import com.DomDevs.app.rest.Exceptions.*;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import com.DomDevs.app.rest.UserService.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,9 +35,14 @@ public class apiControllers {
     }
 
     @PostMapping(value = "/users/create")
-    public String createNewUser(@RequestBody @Valid User user) {
-        userRepo.save(user);
-        return "User Created";
+    public String createNewUser(@RequestBody @Valid User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            throw new ValidationException(errors);
+        } else {
+            userRepo.save(user);
+            return "User Created";
+        }
+
     }
 
     @GetMapping(value = "/users/id/{id}")
@@ -82,18 +85,31 @@ public class apiControllers {
     }
 
     @PutMapping(value = "users/update/{id}")
-    public String updateUser(@PathVariable long id, @Valid @RequestBody User user) {
-        try {
+    public String updateUser(@PathVariable long id, @Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            throw new ValidationException(errors);
+        } else {
             User updatedUser = userRepo.findById(id).get();
             updatedUser.setFirstName(user.getFirstName());
             updatedUser.setLastName(user.getLastName());
             updatedUser.setAge(user.getAge());
             userRepo.save(updatedUser);
             return "Updated User With The id: " + id;
-        } catch (RuntimeException exception) {
-            exception.getStackTrace();
-            throw new UserNotFoundException(id);
         }
+//        try {
+//            User updatedUser = userRepo.findById(id).get();
+//            updatedUser.setFirstName(user.getFirstName());
+//            updatedUser.setLastName(user.getLastName());
+//            updatedUser.setAge(user.getAge());
+//            userRepo.save(updatedUser);
+//            return "Updated User With The id: " + id;
+//        } catch (ValidationException exception) {
+//            if (errors.hasErrors()) {
+//                exception.getStackTrace();
+//                throw new ValidationException(errors);
+//            }
+//            return "Error:";
+//        }
     }
 
     @DeleteMapping(value = "users/delete/{id}")
