@@ -78,7 +78,6 @@ public class ValidationTests {
         user.setAge(0);
         when(userRepo.save(user)).thenThrow(new ValidationException(mockBindingResult));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-
         assertFalse(violations.isEmpty());
 
     }
@@ -98,6 +97,4 @@ public class ValidationTests {
         assertFalse(violations.isEmpty());
 
     }
-
-
 }
