@@ -4,6 +4,7 @@ import com.DomDevs.app.rest.Controller.ApiController;
 import com.DomDevs.app.rest.Models.User;
 import com.DomDevs.app.rest.Repo.UserRepo;
 import com.DomDevs.app.rest.UserService.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,7 +82,7 @@ public class ControllerTests {
 
         when(userService.findAllByFirstName("John")).thenReturn(Collections.singletonList(user));
 
-        mockMvc.perform(get("/users/firstname/john"))
+        mockMvc.perform(get("/users/firstname/John"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1))
@@ -92,9 +93,10 @@ public class ControllerTests {
     public void shouldGetUsersByLastName() throws Exception {
         User user = new User();
         user.setLastName("Doe");
-        when(userRepo.findAllByLastName("Doe"))
-                .thenReturn(Collections.singletonList(user));
-        mockMvc.perform(get("/users/lastname/doe"))
+
+        when(userService.findAllByLastName("Doe")).thenReturn(Collections.singletonList(user));
+
+        mockMvc.perform(get("/users/lastname/Doe"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1))
@@ -135,7 +137,6 @@ public class ControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/delete/1").param("id", "1")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Deleted User With The id: " + user.getId()));
-
     }
 
 
@@ -149,7 +150,10 @@ public class ControllerTests {
 
         when(userRepo.save(user)).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/update/").content(new ObjectMapper().writeValueAsString(user)).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/update/")
+                        .content(mapToJson(user))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[].id()").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName").value("John"))
@@ -158,6 +162,11 @@ public class ControllerTests {
 
     }
 
+
+    private String mapToJson(Object object) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(object);
+    }
 
 }
 

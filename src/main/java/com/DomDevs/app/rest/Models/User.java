@@ -2,9 +2,7 @@ package com.DomDevs.app.rest.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 
 @Entity
@@ -13,9 +11,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
+    @NotEmpty
     @NotNull(message = "Please Enter A First Name")
+    @NotBlank
     private String firstName;
     @Column
+    @NotEmpty
+    @NotBlank
     @NotNull(message = "Please Enter A Last Name")
     private String lastName;
     @Column
