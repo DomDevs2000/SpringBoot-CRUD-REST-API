@@ -51,7 +51,7 @@ public class ApiController {
         }
     }
 
-    @PostMapping(value = "/users/create")
+    @PostMapping(value = "/users")
     public String createNewUser(@RequestBody @Valid User user, BindingResult errors) {
         if (errors.hasErrors()) {
             LOGGER.info("Error:" + errors);
@@ -63,7 +63,7 @@ public class ApiController {
         }
     }
 
-    @GetMapping(value = "/users/id/{id}")
+    @GetMapping(value = "/users/{id}")
     public User getOneUser(@PathVariable long id) {
         try {
             LOGGER.info("Successful GET Request");
@@ -111,7 +111,7 @@ public class ApiController {
         }
     }
 
-    @PutMapping(value = "users/update/{id}")
+    @PutMapping(value = "users/{id}")
     public String updateUser(@PathVariable long id, @Valid @RequestBody User user, BindingResult errors) {
         if (errors.hasErrors()) {
             throw new ValidationException(errors);
@@ -132,7 +132,7 @@ public class ApiController {
         }
     }
 
-    @DeleteMapping(value = "users/delete/{id}")
+    @DeleteMapping(value = "users/{id}")
     public String deleteUser(@PathVariable @Valid long id) {
         try {
 

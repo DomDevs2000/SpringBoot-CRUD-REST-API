@@ -87,7 +87,7 @@ public class ValidationTests {
         User user = new User();
         user.setId(5L);
         user.setFirstName("");
-        user.setLastName("Doe");
+        user.setLastName("");
         user.setAge(151);
         when(userRepo.save(user)).thenThrow(new ValidationException(mockBindingResult));
         Set<ConstraintViolation<User>> violations = validator.validate(user);

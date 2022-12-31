@@ -111,14 +111,14 @@ public class ControllerTests {
         user.setFirstName("John");
         user.setLastName("Doe");
         when(userRepo.findById(20L)).thenReturn(Optional.of(user));
-        mockMvc.perform(get("/users/id/20"))
+        mockMvc.perform(get("/users/20"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldCreateNewUser() throws Exception {
-        mockMvc.perform(post("/users/create").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\": \"John\", \"lastName\":\"Doe\", \"age\":\"22\"}"))
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\": \"John\", \"lastName\":\"Doe\", \"age\":\"22\"}"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("User Created"));
@@ -134,7 +134,7 @@ public class ControllerTests {
 
         when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/users/delete/1").param("id", "1")).andDo(print())
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/1").param("id", "1")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Deleted User With The id: " + user.getId()));
     }
@@ -150,7 +150,7 @@ public class ControllerTests {
 
         when(userRepo.save(user)).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/update/")
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/10")
                         .content(mapToJson(user))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

@@ -37,7 +37,7 @@ public class ExceptionTests {
         when(userRepo.findById(1L))
                 .thenThrow(new UserNotFoundException(1L));
         mockMvc
-                .perform(get("/users/id/1")).andDo(print())
+                .perform(get("/users/1")).andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Could Not Find User 1"));
     }
