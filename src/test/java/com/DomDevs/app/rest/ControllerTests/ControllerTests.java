@@ -21,8 +21,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -118,10 +117,18 @@ public class ControllerTests {
 
     @Test
     public void shouldCreateNewUser() throws Exception {
-        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\": \"John\", \"lastName\":\"Doe\", \"age\":\"22\"}"))
+
+        User user = new User();
+        user.setId(20L);
+        user.setAge(25);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+
+        when(userRepo.save(user)).thenReturn((user));
+
+        mockMvc.perform(post("/users").content(mapToJson(user)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("User Created"));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -134,7 +141,8 @@ public class ControllerTests {
 
         when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/users/1").param("id", "1")).andDo(print())
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/1").param("id", "1"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("Deleted User With The id: " + user.getId()));
     }
@@ -150,9 +158,8 @@ public class ControllerTests {
 
         when(userRepo.save(user)).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/10")
-                        .content(mapToJson(user))
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/users/10")
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"firstName\": \"Jane\", \"lastName\":\"Smith\", \"age\":\"25\"}"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[].id()").exists())
