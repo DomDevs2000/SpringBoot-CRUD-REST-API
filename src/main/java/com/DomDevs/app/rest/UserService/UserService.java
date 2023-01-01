@@ -9,11 +9,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserService implements IUserService {
     @Autowired
     private UserRepo userRepo;
+
+    @Override
+    public List<User> findAll() {
+        return userRepo.findAll();
+    }
 
     @Override
     public List<User> findAllPaginated(int page, int pageSize) {
@@ -37,4 +43,13 @@ public class UserService implements IUserService {
         return userRepo.findAllByLastName(lastName);
     }
 
+    @Override
+    public Optional<User> findById(long id) {
+        return userRepo.findById(id);
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return userRepo.save(user);
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 public class ApiController {
     @Autowired
     private IUserService userService;
+
     @Autowired
     private UserRepo userRepo;
 
@@ -31,7 +33,7 @@ public class ApiController {
     public List<User> getUsers() {
         try {
             LOGGER.info("Successful GET Request");
-            return userRepo.findAll();
+            return userService.findAll();
         } catch (RuntimeException e) {
             LOGGER.info("Failed to GET /users");
             throw new RuntimeException();
@@ -58,16 +60,16 @@ public class ApiController {
             throw new ValidationException(errors);
         } else {
             LOGGER.info("Successful POST Request");
-            userRepo.save(user);
+            userService.saveUser(user);
             return "User Created";
         }
     }
 
     @GetMapping(value = "/users/{id}")
-    public User getOneUser(@PathVariable long id) {
+    public Optional<User> getOneUser(@PathVariable long id) {
         try {
             LOGGER.info("Successful GET Request");
-            return userRepo.findById(id).get();
+            return userService.findById(id);
         } catch (RuntimeException exception) {
             LOGGER.info("Error Finding User");
             throw new UserNotFoundException(id);
@@ -117,11 +119,11 @@ public class ApiController {
             throw new ValidationException(errors);
         } else {
             try {
-                User updatedUser = userRepo.findById(id).get();
+                User updatedUser = userService.findById(id).get();
                 updatedUser.setFirstName(user.getFirstName());
                 updatedUser.setLastName(user.getLastName());
                 updatedUser.setAge(user.getAge());
-                userRepo.save(updatedUser);
+                userService.saveUser(updatedUser);
                 LOGGER.info("Successful PUT Request");
                 return "Updated User With The id: " + id;
             } catch (Exception e) {
@@ -136,7 +138,7 @@ public class ApiController {
     public String deleteUser(@PathVariable @Valid long id) {
         try {
 
-            User deletedUser = userRepo.findById(id).get();
+            User deletedUser = userService.findById(id).get();
             userRepo.delete(deletedUser);
             LOGGER.info("Successful DELETE Request");
             return "Deleted User With The id: " + id;
