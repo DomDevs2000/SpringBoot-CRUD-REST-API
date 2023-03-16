@@ -11,6 +11,7 @@
     <groupId>com.DomDevs.app</groupId>
     <artifactId>rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>SpringBoot-CRUD-REST-API</name>
     <description>CRUD REST API using Spring Boot</description>
     <properties>
@@ -21,7 +22,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>aws-sdk-java</artifactId>
+            <version>2.20.26</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -60,14 +65,10 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.amazonaws.serverless</groupId>
-            <artifactId>aws-serverless-java-container-springboot2</artifactId>
-            <version>1.9.1</version>
-        </dependency>
     </dependencies>
 
     <build>
+        <finalName>SpringBoot-Crud-Rest-Api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -75,5 +76,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
