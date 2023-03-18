@@ -73,5 +73,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>springboot-crud-rest-api</finalName>
     </build>
 </project>
